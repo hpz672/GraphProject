@@ -30,18 +30,24 @@ typedef struct Graph {
 
 #ifndef _Queue_
 #define _Queue_
-//以下定义队列类型 
+//以下定义队列相关类型 
 typedef struct{
 	int data[MAXV];
 	int front;
 	int rear;
 	int isempty;
 }Queue;
+
+typedef struct{
+	int weight;
+	int current;
+	int pre; 
+}Box;
 #endif          /*_Queue_*/
 
 void enQueue(Queue *q, int e);//进队
 int deQueue(Queue *q);//出队 
 static void DFS(AdjGraph *G, int u, int v, int d);//输出顶点u到v的一条路径
-int BFS(AdjGraph *G, int u, int v);//求顶点u到顶点v的最短路径
+void BFS(AdjGraph *G, int u, int v);//求顶点u到顶点v的最短路径
 void Dijkstra(AdjGraph *G, int u, int v);//求顶点u到顶点v的最短路径 
 int strcmp(const char *strOne, const char *strTwo);//比较字符串 

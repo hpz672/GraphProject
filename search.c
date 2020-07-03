@@ -1,8 +1,8 @@
 #include <stdlib.h>
 #include <stdio.h>
+#include "search.h"
 #include "stats.h" 
 #include "stats.c"
-#include "search.h"
 
 int visited[MAXV] = {0};//用于标记该顶点是否被访问
 int g_minnum;//求最短路径中包含的顶点数目 
@@ -11,6 +11,7 @@ int g_pathmin[MAXV];//存储由u到v的最短路径顶点序号
 int dist[MAXV];//记录各顶点到u的距离 
 int path[MAXV];//记录char类型路径 
 int temp[MAXV];//记录逆序路径 
+Box b[MAXV];//记录将边分割为weight-1个顶点后的相对顶点位置 
 
 void enQueue(Queue *q, int e)
 {
@@ -77,56 +78,69 @@ static void DFS(AdjGraph *G, int u, int v, int d)//输出一条从顶点u到v的路径
 }
 
 //采用邻接表的BFS算法：
-int BFS(AdjGraph *G,int u,int v)//求顶点u到顶点v的最短路径
+void BFS(AdjGraph *G, int u, int v)//求顶点u到顶点v的最短路径
 {//采用从顶点u出发广度优先搜索方法，当搜索到顶点v时，在队列中找出对应的路径
-    struct{
-        int vno;//当前顶点编号
-        int level;//当前顶点的层次
-        int parent;//当前顶点的双亲结点在队列中的下标
-    }qu[MAXV];//定义顺序非循环队列
-    int qu_front = -1, qu_rear = -1;
-    int k, lev, i, j;
-    
-    g_minlen = INF;
-    ArcNode *p;
-    visited[u] = 1;
-    qu_rear++;//顶点u已访问，将其入队
-    qu[qu_rear].vno = u;
-    qu[qu_rear].level = 0;
-    qu[qu_rear].parent = -1;
-    while(qu_front<qu_rear)//队非空循环
+ //将每条权值为weight的边拆分为weight-1个顶点，从而转化为等间距BFS搜索 
+    int i, e;
+    int count = 0;
+	ArcNode *t;
+    Queue *q;
+    q = (Queue*)malloc(sizeof(Queue));
+    q->rear = q->front = 0;
+    q->isempty = 1;
+    for (i = 0; i <= G->maxnum; i++) //赋初值 
     {
-        qu_front++;
-        k = qu[qu_front].vno;//出队顶点k
-        lev = qu[qu_front].level;
-        if(k == v)//若顶点k为终点
-        {
-            i = 0;
-            j = qu_front;
-            while(j != -1)
-            {
-                g_pathmin[lev-i] = qu[j].vno;
-                j = qu[j].parent;
-                i++;
-            }
-            g_minlen = lev;//找到顶点v，记录其层次
-            return 1;
-        }
-        p = G->adjlist[k].firstarc;//p指向顶点k的第一个相邻点
-        while(p != NULL)           //依次搜索k的相邻点
-        {
-            if(visited[p->adjvex] == 0)//若未访问过
-            {
-                visited[p->adjvex] = 1;
-                qu_rear++;
-                qu[qu_rear].vno = p->adjvex;//访问过的相邻点进队
-                qu[qu_rear].level = lev + 1;
-                qu[qu_rear].parent = qu_front;
-            }
-            p = p->nextarc; //找到顶点k的下一个相邻点
-        }
-    }
-    return 0;
+    	b[i].pre = -1;
+    	b[i].current = 1;
+	}
+    visited[u] = 1;
+    b[u].weight = 1;
+    enQueue(q, u);
+    while (q->isempty == 0)
+    {
+    	e = deQueue(q);
+    	if (e == v && b[e].current == b[e].weight)
+    	{
+    		break;
+		}
+    	if (b[e].current == b[e].weight)
+    	{
+    		t = G->adjlist[e].firstarc;
+    		while (t != NULL)
+    		{
+    			if (visited[t->adjvex] == 0 || t->weight < b[t->adjvex].weight - b[t->adjvex].current)
+    			{
+    				visited[t->adjvex] = 1;
+    				b[t->adjvex].weight = t->weight;
+    				b[t->adjvex].current = 1;
+    				b[t->adjvex].pre = e;
+    				enQueue(q, t->adjvex);
+				}
+				t = t->nextarc;
+			}
+		}
+		else
+		{
+			b[e].current++;
+			enQueue(q, e);
+		}
+	}
+	if (b[v].pre == -1)//未找到路径直接返回 
+	{
+		return;
+	}
+	i = v;
+	while (i != -1) 
+	{
+		temp[count] = i;//逆序记录路径 
+		count++;
+		i = b[i].pre;
+	}
+	g_minnum = count;
+	for (i = 0; i < count; i++)
+	{
+		g_pathmin[i] = temp[count - i - 1];//保存最短路径 
+	}
 }
 
 //采用邻接表的Dijkstra算法 
@@ -200,6 +214,7 @@ char* shortestPath(int u, int v, char algorithm[], char name[])
     g_minnum = INF;
     g_minlen = INF;
 	
+	printf("Using %s:\n", algorithm);
 	if (strcmp(algorithm, "DFS") == 0 || strcmp(algorithm, "dfs") == 0)	
 	{
 		DFS(G, u, v, 0);
@@ -222,10 +237,11 @@ char* shortestPath(int u, int v, char algorithm[], char name[])
 	
 	if (g_minnum == INF || g_minnum == 1) //未找到路径返回NULL 
 	{
-		printf("\n\tNo path exists!");
+		printf("\tNo path exists!");
 		return NULL;
 	}
 	
+	printf("Path:");
     char *pathmin; //将路径以字符串形式储存 
     int length = 0; //记录所有顶点数字位数之和 
     int temp;
