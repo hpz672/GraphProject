@@ -33,8 +33,8 @@ int main(int argc, char* argv[])
 		printf("\n\n");
 		printf("    -edges: %d\n", numberOfEdges(argv[2]));
 		printf("    -vertices: %d\n", numberOfVertices(argv[2]));
-		printf("    -freeman: %.5f\n", freemanNetworkCentrality(argv[2]));
-		printf("    -closeness: %.5f\n\n\n", closenessCentrality(argv[2], 1));
+		printf("    -freeman: %.6f\n", freemanNetworkCentrality(argv[2]));
+		printf("    -closeness: %.6f\n\n\n", closenessCentrality(argv[2], 1));
 		fclose(fp);
 	}
 	else if (argc == 9 && strcmp(argv[0], "./search-cli") == 0 
