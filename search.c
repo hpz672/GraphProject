@@ -9,8 +9,37 @@ int g_minnum;//求最短路径中包含的顶点数目
 int g_minlen;//求最短路径长度 
 int g_pathmin[MAXV];//存储由u到v的最短路径顶点序号 
 int dist[MAXV];//记录各顶点到u的距离 
-int path[MAXV];//记录路径 
-int temp[MAXV];
+int path[MAXV];//记录char类型路径 
+int temp[MAXV];//记录逆序路径 
+
+void enQueue(Queue *q, int e)
+{
+	if (q->isempty == 1)
+	{
+		q->isempty = 0;
+	}
+	else
+	{
+		q->front = (q->front + 1) % MAXV;
+	}
+	q->data[q->front] = e; 
+	//printf("enQueue: %d\n", e);
+}
+
+int deQueue(Queue *q)
+{
+	int e = q->data[q->rear];
+	if (q->front != q->rear)
+	{
+		q->rear = (q->rear + 1) % MAXV;
+	}
+	else
+	{
+		q->isempty = 1;
+	}
+	//printf("deQueue: %d\n", e);
+	return e;
+}
 
 //采用邻接表的DFS算法： 
 static void DFS(AdjGraph *G, int u, int v, int d)//输出一条从顶点u到v的路径
@@ -101,81 +130,59 @@ int BFS(AdjGraph *G,int u,int v)//求顶点u到顶点v的最短路径
 }
 
 //采用邻接表的Dijkstra算法 
-int Dijkstra(AdjGraph *G, int u, int v)
+void Dijkstra(AdjGraph *G, int u, int v)
 {
-    g_minlen = INF;
-    int tempWeight = 0;
-    int mindis;
-    int i, j, k, l;
-    ArcNode *p;//边结点类型指针
-    
-    for (i = 0; i < G->n; i++)
+    int i, e;
+    int count = 0;
+    ArcNode *t;
+    Queue *q;
+    q = (Queue*)malloc(sizeof(Queue));
+    q->rear = q->front = 0;
+    q->isempty = 1;
+    for (i = 0; i <= G->maxnum; i++)//赋初值 
     {
-        dist[i] = INF;//距离初始化
-        path[i] = -1;//路径初始化 
-        temp[i] = -1;//temp用于临时存储u到v的逆路径，初始化 
-    }
-    visited[u] = 1;	//我不懂为什么要把源点u放进去……我感觉随便放入一个点都可以//源点u放入S中
-    for (i = 0; i < G->n; i++)//遍历所有顶点 
+    	dist[i] = INF;
+    	path[i] = -1;
+	}
+	dist[u] = 0;
+    enQueue(q, u);//u进队 
+    while (q->isempty == 0)
     {
-        p = G->adjlist[i].firstarc;//p指向顶点i的第一个相邻点
-        mindis = INF;
-        while (p != NULL)//第一个循环找与结点i距离最近的点 
-        {
-            j = p->adjvex;//最近的点顶点编号记录为j 
-            if (visited[j] == 0 && dist[j] < mindis)//j没有被访问过并且与集合visited的距离更小 
-            {
-                k = j;
-                mindis = dist[j];//更新顶点和距离信息 
-            }
-            p=p->nextarc;//p指向下一个结点 
-        }  
-    	visited[k] = 1;	//已经找到顶点k现在是距离集合visited中最近的点，将k加入visited中
-    	p = G->adjlist[k].firstarc;//p指向顶点k的第一个相邻点
-    	while (p != NULL)//修改不在visited中的顶点的距离（集合visited中顶点之间的距离已经都是最短的了） 
+    	e = deQueue(q);
+    	visited[e] = 1;//标记该出队顶点已遍历相邻顶点 
+    	t = G->adjlist[e].firstarc;
+    	while (t != NULL)//访问所有与e相连的顶点
     	{
-    	    j = p->adjvex;//p所指向的顶点编号为记为j 
-    	    tempWeight = p->weight;//tempWeight为k到j的权值 
-    	    if (visited[j] == 0)//如果j没有找到过最短路径，考察距离 
-    	    {
-    	        if (dist[k] + tempWeight < dist[j])//邻接表里面不存在tempWeight为INF的情况  
-                {
-                    dist[j] = dist[k] + tempWeight;//修改路径权值 
-                    path[j] = k;//修改j的前一个顶点 
-                }
-            }
-            p=p->nextarc;//p指向下一个结点
-        }
-    }
-    //输出最短路径
-    //如果准许写其他函数，这里可以另写一个尾递归函数，这样就不要两遍赋值了 
-    //尾递归函数使用 
-    /*g_min = 0;
-    DijPath(path, u, v);*/ 
-    i = v;
-    j = 0;
-    while (i != u)//将所有顶点找到，此时是倒置的 
-    {
-        j++;
-        temp[MAXV - j] = path[i];
-        i = path[i];
-    }
-    g_minnum = j;//顶点个数 
-    for (i = 0; i < j; i++)//将所有顶点正过来，放入全局变量数组内 
-    {
-        g_pathmin[i] = temp[MAXV - j + i];
-    }
-    return 1;//成功返回主函数 
+    		//printf("%d %d %d\n", dist[e], t->weight, dist[t->adjvex]);//测试 
+    		if (dist[e] + t->weight < dist[t->adjvex])//贪心 
+    		{
+    			dist[t->adjvex] = dist[e] + t->weight;
+    			path[t->adjvex] = e;
+    			if (visited[t->adjvex] == 0)//若t所指顶点未遍历其相邻顶点则进队 
+    			{
+    				enQueue(q, t->adjvex);
+				}
+			}
+			t = t->nextarc;
+		}
+	}
+	if (path[v] == -1)//未找到路径直接返回 
+	{
+		return;
+	}
+	i = v;
+	while (i != -1) 
+	{
+		temp[count] = i;//逆序记录路径 
+		count++;
+		i = path[i];
+	}
+	g_minnum = count;
+	for (i = 0; i < count; i++)
+	{
+		g_pathmin[i] = temp[count - i - 1];//保存最短路径 
+	}
 }
-
-/*void DijPath(int path[], int u, int v)//尾递归函数将赋值 
-{
-    if(path[u] != v)
-    {
-        dijPath(path, path[u] ,v);
-    }
-    g_pathmin[g_min] = u;
-}*/
 
 char* shortestPath(int u, int v, char algorithm[], char name[])
 {

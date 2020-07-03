@@ -28,8 +28,20 @@ typedef struct Graph {
 }AdjGraph;//完整的图邻接表类型
 #endif           /*_AdjGraph_H_*/
 
-static void DFS(AdjGraph *G, int u, int v, int d);//输出图中从顶点u到v的所有最短的路径
+#ifndef _Queue_
+#define _Queue_
+//以下定义队列类型 
+typedef struct{
+	int data[MAXV];
+	int front;
+	int rear;
+	int isempty;
+}Queue;
+#endif          /*_Queue_*/
+
+void enQueue(Queue *q, int e);//进队
+int deQueue(Queue *q);//出队 
+static void DFS(AdjGraph *G, int u, int v, int d);//输出顶点u到v的一条路径
 int BFS(AdjGraph *G, int u, int v);//求顶点u到顶点v的最短路径
-int Dijkstra(AdjGraph *G, int u, int v);
-int strcmp(const char *strOne, const char *strTwo); 
-void DijPath(int path[], int u, int v);//递归输出最短路径函数 
+void Dijkstra(AdjGraph *G, int u, int v);//求顶点u到顶点v的最短路径 
+int strcmp(const char *strOne, const char *strTwo);//比较字符串 
