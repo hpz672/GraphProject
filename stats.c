@@ -1,5 +1,6 @@
-int visited[MAXV];
-int dist[MAXV];
+int g_visited[MAXV];
+int g_dist[MAXV];
+int g_save[MAXV] = {0};
 
 AdjGraph* createAdjGraph(char name[], AdjGraph *G)
 {
@@ -14,7 +15,7 @@ AdjGraph* createAdjGraph(char name[], AdjGraph *G)
 	G = (AdjGraph*)malloc(sizeof(AdjGraph));
 	for (i = 0; i < MAXV; i++)
 	{
-		visited[MAXV] = 0;
+		g_visited[MAXV] = 0;
 		G->adjlist[i].firstarc = NULL;
 	}
 	fp = fopen(name, "r");
@@ -31,14 +32,14 @@ AdjGraph* createAdjGraph(char name[], AdjGraph *G)
 		t = (ArcNode*)malloc(sizeof(ArcNode));
 		t->adjvex = y;
 		t->weight = weight;
-		if (visited[x] == 0)
+		if (g_visited[x] == 0)
 		{
-			visited[x] = 1;
+			g_visited[x] = 1;
 			n++;
 		}
-		if (visited[y] == 0)
+		if (g_visited[y] == 0)
 		{
-			visited[y] = 1;
+			g_visited[y] = 1;
 			n++;
 		}
 		if (maxnum < x)
@@ -58,7 +59,7 @@ AdjGraph* createAdjGraph(char name[], AdjGraph *G)
 	G->maxnum = maxnum;
 	for (i = 0; i <= maxnum; i++)
 	{
-		visited[i] = 0;
+		g_visited[i] = 0;
 	}
 	return G;
 }
@@ -111,10 +112,9 @@ float freemanNetworkCentrality(char name[])
 	ArcNode *p, *q;
 	int num = 0;
 	int i;
-	float max = 0;
-	float r;
+	double max = 0;
+	double r;
 	G = createAdjGraph(name, G);
-	int save[MAXV] = {0};
 	for (i = 0; i <= G->maxnum; i++)
 	{
 		p = G->adjlist[i].firstarc;
@@ -131,33 +131,33 @@ float freemanNetworkCentrality(char name[])
 			}
 			if (q == NULL)
 			{
-				save[i] += 2;
-				save[p->adjvex] += 2;
+				g_save[i] += 2;
+				g_save[p->adjvex] += 2;
 			}
 			else
 			{
-				save[i] += 1;
-				save[p->adjvex] += 1;
+				g_save[i] += 1;
+				g_save[p->adjvex] += 1;
 			}
-			if (save[i] > max)
+			if (g_save[i] > max)
 			{
-				max = save[i];
+				max = g_save[i];
 			}
-			if (save[p->adjvex] > max)
+			if (g_save[p->adjvex] > max)
 			{
-				max = save[p->adjvex];
+				max = g_save[p->adjvex];
 			}
 			p = p->nextarc;
 		}
 	}
 	for (i = 0; i <= G->maxnum; i++)
 	{
-		if (save[i] != 0)
+		if (g_save[i] != 0)
 		{
-			num += (max - save[i]);
+			num += (max - g_save[i]);
 		}
 	}
-	r = (float)num / (G->n - 1) / (G->n - 2) / 2;
+	r = (double)num / (G->n - 1) / (G->n - 2) / 2;
 	destroyAdjGraph(G);
 	return r;
 }
@@ -168,15 +168,18 @@ float closenessCentrality(char name[], int node)
 	G = createAdjGraph(name, G);
 	int i;
 	int total = 0;
-	float r;
-	Dijkstra(G, node, i);
+	int count = 0;
+	double r;
+	Dijkstra(G, node, node);
 	for (i = 0; i <= G->maxnum; i++)
 	{
-		if (dist[i] != INF)
+		if (g_dist[i] != INF)
 		{
-			total += dist[i];
+			total += g_dist[i];
+			count++;
 		}
 	}
-	r = 1.0 * (G->n - 1) / total;
+	r = 1.0 * (count - 1) / total;
+	destroyAdjGraph(G); 
 	return r;
 } 

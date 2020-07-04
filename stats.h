@@ -3,7 +3,7 @@
 #endif
 
 #ifndef MAXV 
-#define MAXV 1000000//最大顶点个数
+#define MAXV 5000000//最大顶点个数
 #endif
 
 #ifndef _AdjGraph_H_

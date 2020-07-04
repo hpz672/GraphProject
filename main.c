@@ -12,6 +12,7 @@ int main(int argc, char* argv[])
 		printf("The grades are insignificant at all, but what counts most is the Glory of Defeating the Garlic Devil!\n\n"); 
 		printf("Mandatory arguments to long options are mandatory for short options too.\n");
 		printf("        -h/--help                    to show the helping list as here we are\n\n");
+		printf("           -j                        to print the Garlic Devil with great imagination!\n\n");
 		printf("  -g/--graph <FILE_PATH>             to open the graph based on the given path\n");
 	    printf("        -s/--stats                   and show the related statistics of the graph\n");
 	    printf("      <STATS_PARAMS>                 remember to input the parameters in the last position\n");
@@ -23,6 +24,36 @@ int main(int argc, char* argv[])
 	    printf("    -u <STARTING_POINT>              from a specific starting point\n");
 	    printf("    -v <TARGET_POINT>                to a specific target point\n\n");
 	} 
+	else if (argc == 2 && strcmp(argv[0], "./search-cli") == 0 && strcmp(argv[1], "-j") == 0)
+	{
+	    printf("                                         @@@@\n");
+	    printf("                                       @@@  @@@\n");
+	    printf("                                   @@@@@ @@@@ @@@@\n");
+	    printf("                     @@@@@@@@@@@@@@@@@@ @@@@@@@ @@@@@@@@@@@@@@\n");
+	    printf("             @@@@@@@@@@  @@@@@@@@@@@   @@@@@@@@@  @@@@@@@@  @@@@@@@@@@\n");
+	    printf("      @@@@@@@@@@@@@@@  @@@@@@@@@@@@  @@@@@@@@@@@@  @@@@@@@@  @@@@@@@@@@@@@@@@@\n");
+	    printf("  @@@@@@@@@@@@@@@@@  @@@@@@@@@@@@  @@@@@@@@@@@@@@@@  @@@@@@@@  @@@@@@@@@@@@@@@@@@@\n");
+	    printf(" @@@@@@@@@@@@@@@@  @@@@@@@@@@@@  @@@@@@@@@@@@@@@@@@@  @@@@@@@@@  @@@@@@@@@@@@@@@@@@\n");
+	    printf("@@@@@@@@@@@@@@@  @@@@@@@@@@@@  @@@@@@@@@@@@@@@@@@@@@@@  @@@@@@@@@  @@@@@@@@@@@@@@@@@\n");
+	    printf("@@@@@@@@@@@@@  @@@@@@@@@@@@@  @@@@   @@@@@@@@@@@   @@@@  @@@@@@@@@@  @@@@@@@@@@@@@@@\n");
+	    printf("@@@@@@@@@@@@@  @@@@@@@@@@@@  @@@@@   @@@@@@@@@@@   @@@@@  @@@@@@@@@  @@@@@@@@@@@@@@@\n");
+	    printf(" @@@@@@@@@@@@@  @@@@@@@@@@@  @@@@@@@@@@@@@@@@@@@@@@@@@@@  @@@@@@@@  @@@@@@@@@@@@@@@\n");
+	    printf(" @@@@@@@@@@@@@  @@@@@@@@@@@  @@@@@@@@@@@@@@@@@@@@@@@@@@@  @@@@@@@@  @@@@@@@@@@@@@@@\n");
+	    printf("  @@@@@@@@@@@@  @@@@@@@@@@@@  @@@@@@@@@@@@@@@@@@@@@@@@@  @@@@@@@@@  @@@@@@@@@@@@@@\n");
+	    printf("  @@@@@@@@@@@@  @@@@@@@@@@@@  @@@@@@@@@@@@@@@@@@@@@@@@@  @@@@@@@@@  @@@@@@@@@@@@@\n");
+	    printf("    @@@@@@@@@@@  @@@@@@@@@@@  @@@@@@@@@@@@@@@@@@@@@@@@@  @@@@@@@@  @@@@@@@@@@@@@\n");
+	    printf("    @@@@@@@@@@@  @@@@@@@@@@@@  @@@@@@@@@@@@@@@@@@@@@@@  @@@@@@@@@  @@@@@@@@@@@@\n");
+	    printf("     @@@@@@@@@@@  @@@@@@@@@@@  @@  @@@@@@  @@@@@@  @@@  @@@@@@@@  @@@@@@@@@@@@\n");
+	    printf("      @@@@@@@@@@  @@@@@@@@@@@  @@@  @@@  @@  @@@  @@@@  @@@@@@@@  @@@@@@@@@@@\n");
+	    printf("       @@@@@@@@@@  @@@@@@@@@@@  @@@  @  @@@@  @  @@@@  @@@@@@@@  @@@@@@@@@@@\n");
+	    printf("        @@@@@@@@@@  @@@@@@@@@@  @@@@  @@@@@@@  @@@@@  @@@@@@@  @@@@@@@@@@@\n");
+	    printf("         @@@@@@@@@@  @@@@@@@@@@  @@@@@@@@@@@@@@@@@@@  @@@@@@  @@@@@@@@@\n");
+	    printf("           @@@@@@@@@  @@@@@@@@@@  @@@@@@@@@@@@@@@@@  @@@@@@@  @@@@@@@@@@\n");
+	    printf("             @@@@@@@@  @@@@@@@@@@  @@@@@@@@@@@@@@@  @@@@@@@  @@@@@@@@@\n");
+	    printf("               @@@@@@@  @@@@@@@@@@  @@@@@@@@@@@@@  @@@@@@@  @@@@@@@@\n");
+	    printf("                 @@@@@@  @@@@@@@@@@  @@@@@@@@@@@  @@@@@@@  @@@@@@@\n");
+	    printf("                   @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@\n");
+    }
 	else if (argc == 5 && strcmp(argv[0], "./search-cli") == 0 
 	&& (strcmp(argv[1], "-g") == 0 || strcmp(argv[1], "--graph") == 0) 
 	&& (strcmp(argv[3], "-s") == 0 || strcmp(argv[3], "--stats") == 0)
