@@ -1,34 +1,62 @@
 #ifndef INF
-#define INF 32767//å®šä¹‰æ— ç©·å¤§
+#define INF 2147483647//¶¨ÒåÎŞÇî´ó
 #endif
 
 #ifndef MAXV 
-#define MAXV 1000000//æœ€å¤§é¡¶ç‚¹ä¸ªæ•°
+#define MAXV 5000000//×î´ó¶¥µã¸öÊı
 #endif
 
 #ifndef _AdjGraph_H_
 #define _AdjGraph_H_
-//ä»¥ä¸‹å®šä¹‰é‚»æ¥è¡¨çš„ç±»å‹ 
+//ÒÔÏÂ¶¨ÒåÁÚ½Ó±íµÄÀàĞÍ 
 typedef struct ArcNode {
-    int adjvex;//è¯¥è¾¹çš„é‚»æ¥ç‚¹ç¼–å·
-    struct ArcNode *nextarc;//æŒ‡å‘ä¸‹ä¸€æ¡è¾¹çš„æŒ‡é’ˆ
-    int weight;//è¯¥è¾¹çš„ç›¸å…³ä¿¡æ¯,å¦‚æƒå€¼ï¼ˆç”¨æ•´å‹è¡¨ç¤ºï¼‰
-}ArcNode;//è¾¹ç»“ç‚¹ç±»å‹
+    int adjvex;//¸Ã±ßµÄÁÚ½Óµã±àºÅ
+    struct ArcNode *nextarc;//Ö¸ÏòÏÂÒ»Ìõ±ßµÄÖ¸Õë
+    int weight;//¸Ã±ßµÄÏà¹ØĞÅÏ¢,ÈçÈ¨Öµ£¨ÓÃÕûĞÍ±íÊ¾£©
+}ArcNode;//±ß½áµãÀàĞÍ
 
 typedef struct VNode {
-    char info;//é¡¶ç‚¹ä¿¡æ¯
-    ArcNode *firstarc;//æŒ‡å‘ç¬¬ä¸€æ¡è¾¹
-}VNode;//é‚»æ¥è¡¨ç»“ç‚¹ç±»å‹
+    char info;//¶¥µãĞÅÏ¢
+    ArcNode *firstarc;//Ö¸ÏòµÚÒ»Ìõ±ß
+}VNode;//ÁÚ½Ó±í½áµãÀàĞÍ
 
 typedef struct Graph {
-    VNode adjlist[MAXV];//é‚»æ¥è¡¨å¤´ç»“ç‚¹æ•°ç»„
-    int n;//å›¾ä¸­é¡¶ç‚¹æ•°
-    int e;//å›¾ä¸­è¾¹æ•°
-}AdjGraph;//å®Œæ•´çš„å›¾é‚»æ¥è¡¨ç±»å‹
+    VNode adjlist[MAXV];//ÁÚ½Ó±íÍ·½áµãÊı×é
+    int n;//Í¼ÖĞ¶¥µãÊı
+    int e;//Í¼ÖĞ±ßÊı
+    int maxnum;//Í¼ÖĞ×î´ó¶¥µãÖµ 
+}AdjGraph;//ÍêÕûµÄÍ¼ÁÚ½Ó±íÀàĞÍ
+
+AdjGraph* createAdjGraph(char name[], AdjGraph *G);
+void destroyAdjGraph(AdjGraph *G);
 #endif           /*_AdjGraph_H_*/
 
-static void DFS(AdjGraph *G, int u, int v, int path[], int d);//è¾“å‡ºå›¾ä¸­ä»é¡¶ç‚¹uåˆ°vçš„æ‰€æœ‰æœ€çŸ­çš„è·¯å¾„
-int BFS(AdjGraph *G, int u, int v, int path[]);//æ±‚é¡¶ç‚¹uåˆ°é¡¶ç‚¹vçš„æœ€çŸ­è·¯å¾„
-int Dijkstra(AdjGraph *G, int u, int v);
-int strcmp(const char *strOne, const char *strTwo); 
-void DijPath(int path[], int u, int v);//é€’å½’è¾“å‡ºæœ€çŸ­è·¯å¾„å‡½æ•° 
+#ifndef _Queue_H_ 
+#define _Queue_H_
+//ÒÔÏÂ¶¨Òå¶ÓÁĞÏà¹ØÀàĞÍ 
+typedef struct{
+	int data[MAXV];
+	int front;
+	int rear;
+	int isempty;
+}Queue;
+
+typedef struct{
+	int weight;
+	int current;
+	int pre; 
+}Box;
+
+void enQueue(Queue *q, int e);//½ø¶Ó
+int deQueue(Queue *q);//³ö¶Ó 
+#endif          /*_Queue_H_*/
+
+#ifndef _SEARCH_H_
+#define _SEARCH_H_
+static void DFS(AdjGraph *G, int u, int v, int d);//Êä³ö¶¥µãuµ½vµÄÒ»ÌõÂ·¾¶
+void BFS(AdjGraph *G, int u, int v);//Çó¶¥µãuµ½¶¥µãvµÄ×î¶ÌÂ·¾¶
+void Dijkstra(AdjGraph *G, int u, int v);//Çó¶¥µãuµ½¶¥µãvµÄ×î¶ÌÂ·¾¶ 
+char* shortestPath(int u, int v, char algorithm[], char name[]);//ÒÔ×Ö·û´®ĞÎÊ½·µ»Ø×î¶ÌÂ·¾¶ 
+#endif         /*_Search_H_*/
+
+int strcmp(const char *strOne, const char *strTwo);//±È½Ï×Ö·û´® 
