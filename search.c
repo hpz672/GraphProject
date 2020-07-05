@@ -107,7 +107,7 @@ void BFS(AdjGraph *G, int u, int v)//求顶点u到顶点v的最短路径
     		t = G->adjlist[e].firstarc;
     		while (t != NULL)
     		{
-    			if (g_visited[t->adjvex] == 0 || t->weight < g_box[t->adjvex].weight - g_box[t->adjvex].current)
+    			if (g_visited[t->adjvex] == 0 || t->weight <= g_box[t->adjvex].weight - g_box[t->adjvex].current)
     			{
     				g_box[t->adjvex].weight = t->weight;
     				g_box[t->adjvex].current = 1;
