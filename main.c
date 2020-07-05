@@ -1,4 +1,7 @@
-#include "search.c" 
+#include <stdio.h>
+#include <stdlib.h>
+#include "search.h"
+#include "stats.h"
 
 int count(const char *str);//计算输入字符串的长度 
 int charToNumber(const char *str);//将字符串转换为数字 
@@ -24,7 +27,7 @@ int main(int argc, char* argv[])
 	    printf("    -u <STARTING_POINT>              from a specific starting point\n");
 	    printf("    -v <TARGET_POINT>                to a specific target point\n\n");
 	} 
-	else if (argc == 2 && strcmp(argv[0], "./search-cli") == 0 && strcmp(argv[1], "-j") == 0)
+	else if (argc == 2 && strcmp(argv[1], "-j") == 0)
 	{
 	    printf("                                         @@@@\n");
 	    printf("                                       @@@  @@@\n");
@@ -54,15 +57,13 @@ int main(int argc, char* argv[])
 	    printf("                 @@@@@@  @@@@@@@@@@  @@@@@@@@@@@  @@@@@@@  @@@@@@@\n");
 	    printf("                   @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@\n");
     }
-	else if (argc == 5 && strcmp(argv[0], "./search-cli") == 0 
-	&& (strcmp(argv[1], "-g") == 0 || strcmp(argv[1], "--graph") == 0) 
+	else if (argc == 5 && (strcmp(argv[1], "-g") == 0 || strcmp(argv[1], "--graph") == 0) 
 	&& (strcmp(argv[3], "-s") == 0 || strcmp(argv[3], "--stats") == 0)
 	&& (strcmp(argv[4], "-edges") == 0 || strcmp(argv[4], "-vertices") == 0 
 	|| strcmp(argv[4], "-freeman") == 0)
-	|| argc == 6 && strcmp(argv[0], "./search-cli") == 0 
-	&& (strcmp(argv[1], "-g") == 0 || strcmp(argv[1], "--graph") == 0) 
+	|| argc == 6 && (strcmp(argv[1], "-g") == 0 || strcmp(argv[1], "--graph") == 0) 
 	&& (strcmp(argv[3], "-s") == 0 || strcmp(argv[3], "--stats") == 0)
-	&& strcmp(argv[4], "-closeness") == 0)
+	&& strcmp(argv[4], "closeness") == 0)
 	{
 		FILE *fp;
 		fp = fopen(argv[2], "r");
@@ -72,15 +73,15 @@ int main(int argc, char* argv[])
 			return 0;	
 		}
 		printf("\n");
-		if (strcmp(argv[4], "-edges") == 0)
+		if (strcmp(argv[4], "edges") == 0)
 		{
 			printf("    Edges: %d\n\n", numberOfEdges(argv[2]));
 		}
-		else if (strcmp(argv[4], "-vertices") == 0)
+		else if (strcmp(argv[4], "vertices") == 0)
         {
         	printf("    Vertices: %d\n\n", numberOfVertices(argv[2]));
 		}
-        else if (strcmp(argv[4], "-freeman") == 0)
+        else if (strcmp(argv[4], "freeman") == 0)
         {
         	printf("    Freeman Network Centrality: %.6f\n\n", freemanNetworkCentrality(argv[2]));
 		}
@@ -92,8 +93,7 @@ int main(int argc, char* argv[])
 		
 		fclose(fp);
 	}
-	else if (argc == 9 && strcmp(argv[0], "./search-cli") == 0 
-	&& (strcmp(argv[1], "-g") == 0 || strcmp(argv[1], "--graph") == 0) 
+	else if (argc == 9 && (strcmp(argv[1], "-g") == 0 || strcmp(argv[1], "--graph") == 0) 
 	&& (strcmp(argv[3], "-sp") == 0 || strcmp(argv[3], "--shortestpath") == 0)
 	&& strcmp(argv[5], "-u") == 0 && strcmp(argv[7], "-v") == 0)
 	{

@@ -1,3 +1,8 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include "stats.h"
+#include "search.h"
+
 int g_visited[MAXV];
 int g_dist[MAXV];
 int g_save[MAXV] = {0};

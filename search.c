@@ -1,10 +1,8 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include "search.h"
-#include "stats.h" 
-#include "stats.c"
 
-int visited[MAXV] = {0};//用于标记该顶点是否被访问
+int g_visited[MAXV] = {0};//用于标记该顶点是否被访问
 int g_minnum;//求最短路径中包含的顶点数目 
 int g_minlen;//求最短路径长度 
 int g_pathmin[MAXV];//存储由u到v的最短路径顶点序号 
@@ -309,12 +307,8 @@ char* shortestPath(int u, int v, char algorithm[], char name[])
     return pathmin;
 }
 
-//版权声明：本函数参考了CSDN博主「js_xj」的原创文章，遵循CC 4.0 BY-SA版权协议，转载请附上原文出处链接及本声明。
-//原文链接：https://blog.csdn.net/js_xj/java/article/details/6253096
-int strcmp(const char *strOne, const char *strTwo)//经过检测，本函数没有问题 
+int strcmp(const char *strOne, const char *strTwo)//比较字符串 
 {
-    /*if ((NULL == strOne) || (NULL == strTwo))
-        throw"Invalid Arguments!";*/
     while((*strOne != '\0') && (*strTwo != '\0') && (*strOne == *strTwo))
     {
         strOne++;

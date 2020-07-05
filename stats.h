@@ -28,9 +28,12 @@ typedef struct Graph {
 }AdjGraph;//完整的图邻接表类型
 #endif           /*_AdjGraph_H_*/
 
+#ifndef _STATS_H_ 
+#define _STATS_H_
 AdjGraph* createAdjGraph(char name[], AdjGraph *G);
 void destroyAdjGraph(AdjGraph *G);
 int numberOfEdges(char name[]);
 int numberOfVertices(char name[]);
 float freemanNetworkCentrality(char name[]);
 float closenessCentrality(char name[], int node);
+#endif           /*_Stats_H_*/

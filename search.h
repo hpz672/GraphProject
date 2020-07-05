@@ -26,10 +26,13 @@ typedef struct Graph {
     int e;//图中边数
     int maxnum;//图中最大顶点值 
 }AdjGraph;//完整的图邻接表类型
+
+AdjGraph* createAdjGraph(char name[], AdjGraph *G);
+void destroyAdjGraph(AdjGraph *G);
 #endif           /*_AdjGraph_H_*/
 
-#ifndef _Queue_
-#define _Queue_
+#ifndef _Queue_H_ 
+#define _Queue_H_
 //以下定义队列相关类型 
 typedef struct{
 	int data[MAXV];
@@ -43,11 +46,17 @@ typedef struct{
 	int current;
 	int pre; 
 }Box;
-#endif          /*_Queue_*/
 
 void enQueue(Queue *q, int e);//进队
 int deQueue(Queue *q);//出队 
+#endif          /*_Queue_H_*/
+
+#ifndef _SEARCH_H_
+#define _SEARCH_H_
 static void DFS(AdjGraph *G, int u, int v, int d);//输出顶点u到v的一条路径
 void BFS(AdjGraph *G, int u, int v);//求顶点u到顶点v的最短路径
 void Dijkstra(AdjGraph *G, int u, int v);//求顶点u到顶点v的最短路径 
+char* shortestPath(int u, int v, char algorithm[], char name[]);//以字符串形式返回最短路径 
+#endif         /*_Search_H_*/
+
 int strcmp(const char *strOne, const char *strTwo);//比较字符串 
